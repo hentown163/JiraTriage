@@ -9,13 +9,15 @@ public class TicketEnrichmentWorker : BackgroundService
 {
     private readonly ILogger<TicketEnrichmentWorker> _logger;
     private readonly HttpClient _httpClient;
+    private readonly DecisionLogService _decisionLogService;
     private const string PythonAgentUrl = "http://127.0.0.1:8001/process_ticket";
     private const double ConfidenceThreshold = 0.7;
 
-    public TicketEnrichmentWorker(ILogger<TicketEnrichmentWorker> logger, IHttpClientFactory httpClientFactory)
+    public TicketEnrichmentWorker(ILogger<TicketEnrichmentWorker> logger, IHttpClientFactory httpClientFactory, DecisionLogService decisionLogService)
     {
         _logger = logger;
         _httpClient = httpClientFactory.CreateClient();
+        _decisionLogService = decisionLogService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -104,6 +106,7 @@ public class TicketEnrichmentWorker : BackgroundService
     private Task EnqueueForHumanReviewAsync(SanitizedTicket ticket, EnrichedTicketResult result)
     {
         _logger.LogInformation("Enqueueing ticket {IssueKey} for human review", ticket.IssueKey);
+        _decisionLogService.AddPendingReview(ticket, result);
         return Task.CompletedTask;
     }
 
@@ -135,6 +138,8 @@ public class TicketEnrichmentWorker : BackgroundService
             Confidence = result.Confidence
         };
 
+        _decisionLogService.LogDecision(decisionLog);
+        
         _logger.LogInformation("Decision logged for {IssueKey}: Action={Action}, Confidence={Confidence}", 
             ticket.IssueKey, decisionLog.ActionTaken, decisionLog.Confidence);
         

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JiraTriage.Worker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+04ab66b37be343519af4b60986a4c8e938c53000")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c41b2ee0ef3be8aa31f14ee070c0887695ef8e59")]
 [assembly: System.Reflection.AssemblyProductAttribute("JiraTriage.Worker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JiraTriage.Worker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

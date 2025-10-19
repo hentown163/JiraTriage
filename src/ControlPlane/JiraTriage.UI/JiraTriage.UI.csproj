@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JiraTriage.Core\JiraTriage.Core.csproj" />
+    <ProjectReference Include="..\JiraTriage.Worker\JiraTriage.Worker.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

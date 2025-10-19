@@ -1,14 +1,32 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using JiraTriage.Core.Services;
 
 namespace JiraTriage.UI.Pages.Logs;
 
 public class LogsIndexModel : PageModel
 {
+    private readonly DecisionLogService _decisionLogService;
+
+    public LogsIndexModel(DecisionLogService decisionLogService)
+    {
+        _decisionLogService = decisionLogService;
+    }
+
     public List<DecisionLog> DecisionLogs { get; set; } = new();
 
     public void OnGet()
     {
-        DecisionLogs = new List<DecisionLog>();
+        var recentLogs = _decisionLogService.GetRecentLogs();
+        DecisionLogs = recentLogs.Select(log => new DecisionLog
+        {
+            Timestamp = log.Timestamp,
+            IssueKey = log.JiraIssueKey,
+            Department = log.Classification?.Department ?? "Unknown",
+            Team = log.Classification?.Team ?? "Unknown",
+            ActionTaken = log.ActionTaken ?? "unknown",
+            Confidence = log.Confidence,
+            ModelUsed = log.ModelUsed ?? "unknown"
+        }).ToList();
     }
 }
 
