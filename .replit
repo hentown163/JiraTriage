@@ -33,3 +33,7 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["dotnet", "run", "--project", "src/ControlPlane/JiraTriage.UI/JiraTriage.UI.csproj", "--urls", "http://0.0.0.0:5000"]

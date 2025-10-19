@@ -1,0 +1,82 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.log
+.vs/
+.vscode/
+*.csproj.user
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.pythonlibs/
+*.egg
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+*.local
+
+# Logs
+*.log
+logs/
+/tmp/
+
+# Replit
+.replit
+.upm/
+.cache/
+.config/
+.pythonlibs/
+
+# Build outputs
+node_modules/
+wwwroot/lib/
+
+# Test coverage
+coverage/
+*.coverage
+htmlcov/
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Secrets (never commit!)
+appsettings.*.json
+!appsettings.json
+secrets.json
+*.key
+*.pem
+*.pfx
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Attachments
+attached_assets/

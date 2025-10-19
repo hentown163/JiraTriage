@@ -1,0 +1,83 @@
+@page
+@model LogsIndexModel
+@{
+    ViewData["Title"] = "Decision Logs";
+}
+
+<h1>Decision Logs</h1>
+<p class="text-muted">Immutable audit trail of all AI decisions with full provenance and citations.</p>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Decisions</h5>
+            </div>
+            <div class="card-body">
+                @if (!Model.DecisionLogs.Any())
+                {
+                    <div class="alert alert-info">
+                        <p>No decisions logged yet. Process some tickets to see them appear here.</p>
+                    </div>
+                }
+                else
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Issue Key</th>
+                                <th>Department</th>
+                                <th>Team</th>
+                                <th>Action</th>
+                                <th>Confidence</th>
+                                <th>Model</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var log in Model.DecisionLogs)
+                            {
+                                <tr>
+                                    <td>@log.Timestamp.ToString("g")</td>
+                                    <td><strong>@log.IssueKey</strong></td>
+                                    <td>@log.Department</td>
+                                    <td>@log.Team</td>
+                                    <td>
+                                        @if (log.ActionTaken == "auto_update")
+                                        {
+                                            <span class="badge bg-success">Auto-processed</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">Human Review</span>
+                                        }
+                                    </td>
+                                    <td>@(log.Confidence.ToString("P0"))</td>
+                                    <td>@log.ModelUsed</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Compliance & Observability</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>All decisions are immutable and auditable</li>
+                    <li>Full citation tracking for knowledge retrieval</li>
+                    <li>Policy flags are logged for compliance review</li>
+                    <li>Sensitive data is redacted per DLP policies</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

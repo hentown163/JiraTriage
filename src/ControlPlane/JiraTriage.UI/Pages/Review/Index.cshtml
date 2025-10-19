@@ -1,0 +1,52 @@
+@page
+@model ReviewIndexModel
+@{
+    ViewData["Title"] = "Pending Reviews";
+}
+
+<h1>Tickets Requiring Human Review</h1>
+<p class="text-muted">Tickets flagged for human oversight due to low confidence, policy violations, or high-risk content.</p>
+
+<div class="row mt-4">
+    @if (!Model.PendingTickets.Any())
+    {
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h4 class="alert-heading">No Pending Reviews</h4>
+                <p>All tickets have been processed successfully. Great work!</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Issue Key</th>
+                        <th>Summary</th>
+                        <th>AI Suggestion</th>
+                        <th>Confidence</th>
+                        <th>Flags</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in Model.PendingTickets)
+                    {
+                        <tr>
+                            <td><strong>@ticket.IssueKey</strong></td>
+                            <td>@ticket.Summary</td>
+                            <td>@ticket.Department / @ticket.Team</td>
+                            <td><span class="badge bg-warning">@(ticket.Confidence.ToString("P0"))</span></td>
+                            <td>@string.Join(", ", ticket.PolicyFlags)</td>
+                            <td>
+                                <a href="/Review/Details?key=@ticket.IssueKey" class="btn btn-sm btn-primary">Review</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
