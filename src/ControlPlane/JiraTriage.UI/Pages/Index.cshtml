@@ -1,0 +1,63 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "JIRA Triage Agent Dashboard";
+}
+
+<div class="text-center">
+    <h1 class="display-4">JIRA Triage Agent Dashboard</h1>
+    <p class="lead">GenAI-Powered Ticket Triage with Human-in-the-Loop Review</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Pending Reviews</h5>
+                <p class="card-text display-4">@Model.PendingReviews</p>
+                <a href="/Review" class="btn btn-primary">View All</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Auto-Processed Today</h5>
+                <p class="card-text display-4">@Model.AutoProcessedToday</p>
+                <a href="/Logs" class="btn btn-info">View Logs</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">System Health</h5>
+                <p class="card-text">
+                    <span class="badge bg-success fs-5">Operational</span>
+                </p>
+                <p class="text-muted">Control Plane: .NET 8</p>
+                <p class="text-muted">Reasoning Plane: Python 3.11</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Architecture: Hybrid Polyglot with Clean Boundaries</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><strong>Control Plane (.NET 8)</strong>: Webhook ingestion, DLP redaction, policy enforcement, JIRA integration</li>
+                    <li><strong>Reasoning Plane (Python 3.11)</strong>: LangGraph agents, RAG retrieval, LLM classification</li>
+                    <li><strong>Security</strong>: Zero-trust data governance, all sensitive data stays in .NET boundary</li>
+                    <li><strong>Observability</strong>: Immutable decision logs, full audit trail</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
