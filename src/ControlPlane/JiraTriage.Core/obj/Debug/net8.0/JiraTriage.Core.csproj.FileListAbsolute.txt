@@ -10,3 +10,4 @@
 /home/runner/workspace/src/ControlPlane/JiraTriage.Core/obj/Debug/net8.0/refint/JiraTriage.Core.dll
 /home/runner/workspace/src/ControlPlane/JiraTriage.Core/obj/Debug/net8.0/JiraTriage.Core.pdb
 /home/runner/workspace/src/ControlPlane/JiraTriage.Core/obj/Debug/net8.0/ref/JiraTriage.Core.dll
+/home/runner/workspace/src/ControlPlane/JiraTriage.Core/obj/Debug/net8.0/JiraTriage.Core.csproj.AssemblyReference.cache

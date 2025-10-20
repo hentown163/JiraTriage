@@ -54,6 +54,14 @@
             "Azure.Security.KeyVault.Secrets": {
               "target": "Package",
               "version": "[4.8.0, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Polly": {
+              "target": "Package",
+              "version": "[8.6.4, )"
             }
           },
           "imports": [

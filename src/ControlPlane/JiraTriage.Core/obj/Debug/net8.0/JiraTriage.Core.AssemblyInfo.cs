@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JiraTriage.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42ad9eef13bfd69c92330be6b5e9848803f42c38")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f1c2061261428c87eec197c9c14a4c860fc4a2be")]
 [assembly: System.Reflection.AssemblyProductAttribute("JiraTriage.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JiraTriage.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
