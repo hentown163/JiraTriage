@@ -4,14 +4,14 @@
     "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/JiraTriage.Webhook.csproj": {}
   },
   "projects": {
-    "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/JiraTriage.Webhook.csproj": {
+    "/home/runner/workspace/src/ControlPlane/JiraTriage.Core/JiraTriage.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/JiraTriage.Webhook.csproj",
-        "projectName": "JiraTriage.Webhook",
-        "projectPath": "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/JiraTriage.Webhook.csproj",
+        "projectUniqueName": "/home/runner/workspace/src/ControlPlane/JiraTriage.Core/JiraTriage.Core.csproj",
+        "projectName": "JiraTriage.Core",
+        "projectPath": "/home/runner/workspace/src/ControlPlane/JiraTriage.Core/JiraTriage.Core.csproj",
         "packagesPath": "/home/runner/.nuget/packages/",
-        "outputPath": "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/obj/",
+        "outputPath": "/home/runner/workspace/src/ControlPlane/JiraTriage.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/runner/.nuget/NuGet/NuGet.Config"
@@ -42,6 +42,92 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.17.0, )"
+            },
+            "Azure.Messaging.ServiceBus": {
+              "target": "Package",
+              "version": "[7.20.1, )"
+            },
+            "Azure.Security.KeyVault.Secrets": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/nix/store/xd9xy9mf4wmmlcdk51kzvsrnazqsajfz-dotnet-sdk-8.0.412/share/dotnet/sdk/8.0.412/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/JiraTriage.Webhook.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/JiraTriage.Webhook.csproj",
+        "projectName": "JiraTriage.Webhook",
+        "projectPath": "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/JiraTriage.Webhook.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/workspace/src/ControlPlane/JiraTriage.Webhook/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/runner/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/runner/workspace/src/ControlPlane/JiraTriage.Core/JiraTriage.Core.csproj": {
+                "projectPath": "/home/runner/workspace/src/ControlPlane/JiraTriage.Core/JiraTriage.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.17.0, )"
+            },
+            "Azure.Messaging.ServiceBus": {
+              "target": "Package",
+              "version": "[7.20.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
