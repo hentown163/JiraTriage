@@ -1,10 +1,18 @@
+"""
+JIRA Triage Agent - Reasoning Plane
+FastAPI service with LangGraph multi-agent workflow for ticket triage
+"""
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 from datetime import datetime
 import time
+import os
 
-app = FastAPI(title="JIRA Triage Agent - Reasoning Plane", version="1.0.0")
+from langgraph_agent import agent
+
+app = FastAPI(title="JIRA Triage Agent - Reasoning Plane", version="2.0.0")
 
 class SanitizedTicket(BaseModel):
     ticket_id: str
@@ -33,7 +41,7 @@ class EnrichedTicketResult(BaseModel):
     citations: List[str] = []
     policy_flags: List[str] = []
     confidence: float = 0.0
-    model_used: str = "demo-mock-llm"
+    model_used: str = "gpt-5-langgraph"
     latency_ms: int = 0
     requires_human_review: bool = False
 
@@ -42,114 +50,86 @@ async def root():
     return {
         "service": "JIRA Triage Agent - Reasoning Plane",
         "status": "operational",
-        "architecture": "Hybrid Polyglot - Python GenAI Layer"
+        "architecture": "Hybrid Polyglot - Python GenAI Layer with LangGraph",
+        "ai_model": "gpt-5",
+        "features": [
+            "Multi-agent workflow (Classify → Retrieve → Generate → Policy)",
+            "Vertical slice routing (IT, HR, Finance, Legal)",
+            "Zero-trust data governance",
+            "Human-in-the-loop policy enforcement"
+        ]
     }
 
 @app.get("/health")
 async def health():
-    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
+    openai_configured = bool(os.environ.get("OPENAI_API_KEY"))
+    azure_openai_configured = bool(
+        os.environ.get("AZURE_OPENAI_ENDPOINT") and 
+        os.environ.get("AZURE_OPENAI_API_KEY")
+    )
+    agent_ready = openai_configured or azure_openai_configured
+    
+    return {
+        "status": "healthy" if agent_ready else "degraded",
+        "timestamp": datetime.utcnow().isoformat(),
+        "openai_public_configured": openai_configured,
+        "azure_openai_configured": azure_openai_configured,
+        "agent_ready": agent_ready,
+        "message": "OK" if agent_ready else "No OpenAI credentials configured (OPENAI_API_KEY or AZURE_OPENAI_ENDPOINT+API_KEY required)"
+    }
 
 @app.post("/process_ticket", response_model=EnrichedTicketResult)
 async def process_ticket(ticket: SanitizedTicket) -> EnrichedTicketResult:
     """
-    Process a sanitized ticket through the LangGraph agent.
-    This is a simplified version for demonstration.
+    Process a sanitized ticket through the LangGraph multi-agent workflow.
+    
+    Workflow: ClassifyNode → RetrieveNode → GenerateNode → PolicyNode
     """
     start_time = time.time()
     
     try:
-        classification = classify_ticket(ticket)
+        ticket_data = {
+            "ticket_id": ticket.ticket_id,
+            "issue_key": ticket.issue_key,
+            "summary": ticket.summary,
+            "description": ticket.description,
+            "issue_type": ticket.issue_type or "Unknown",
+            "priority": ticket.priority or "Medium",
+            "reporter": ticket.reporter or "unknown",
+            "redaction_flags": ticket.redaction_flags
+        }
         
-        retrieved_docs = retrieve_knowledge(ticket, classification)
-        
-        comment = generate_response(ticket, classification, retrieved_docs)
-        
-        policy_flags = check_policy(ticket)
-        
-        confidence = classification.confidence
-        requires_review = confidence < 0.7 or len(policy_flags) > 0 or "external_email" in ticket.redaction_flags
+        result = agent.process(ticket_data)
         
         latency = int((time.time() - start_time) * 1000)
         
+        classification_data = result.get("classification", {})
+        classification = Classification(
+            department=classification_data.get("department"),
+            team=classification_data.get("team"),
+            suggested_priority=classification_data.get("suggested_priority"),
+            suggested_assignee=classification_data.get("suggested_assignee"),
+            confidence=classification_data.get("confidence", 0.0)
+        )
+        
         return EnrichedTicketResult(
-            ticket_id=ticket.ticket_id,
-            issue_key=ticket.issue_key,
+            ticket_id=result["ticket_id"],
+            issue_key=result["issue_key"],
             classification=classification,
-            generated_comment=comment,
-            citations=retrieved_docs,
-            policy_flags=policy_flags,
-            confidence=confidence,
-            model_used="mock-classifier-v1",
+            generated_comment=result.get("generated_comment", ""),
+            citations=result.get("citations", []),
+            policy_flags=result.get("policy_flags", []),
+            confidence=result.get("confidence", 0.0),
+            model_used=result.get("model_used", "gpt-5-langgraph"),
             latency_ms=latency,
-            requires_human_review=requires_review
+            requires_human_review=result.get("requires_human_review", False)
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-def classify_ticket(ticket: SanitizedTicket) -> Classification:
-    """
-    Mock classification logic - Replace with LangGraph ClassifyNode
-    """
-    summary_lower = ticket.summary.lower()
-    description_lower = ticket.description.lower()
-    
-    if any(word in summary_lower or word in description_lower 
-           for word in ["database", "db", "sql", "timeout", "connection"]):
-        return Classification(
-            department="IT",
-            team="DBA",
-            suggested_priority="High",
-            suggested_assignee="dba-lead@company.com",
-            confidence=0.92
+        raise HTTPException(
+            status_code=500,
+            detail=f"Agent processing failed: {str(e)}"
         )
-    elif any(word in summary_lower or word in description_lower 
-             for word in ["onboard", "hire", "employee", "contractor"]):
-        return Classification(
-            department="HR",
-            team="Onboarding",
-            suggested_priority="Medium",
-            suggested_assignee="hr-onboarding@company.com",
-            confidence=0.85
-        )
-    else:
-        return Classification(
-            department="General",
-            team="Support",
-            suggested_priority="Medium",
-            confidence=0.65
-        )
-
-def retrieve_knowledge(ticket: SanitizedTicket, classification: Classification) -> List[str]:
-    """
-    Mock RAG retrieval - Replace with actual vector DB query
-    """
-    if classification.department == "IT":
-        return ["Confluence:KB-887", "Confluence:NetACLs-Staging"]
-    elif classification.department == "HR":
-        return ["HR-Policy:Contractor-Onboarding-Checklist"]
-    return ["GeneralKB:Support-Guidelines"]
-
-def generate_response(ticket: SanitizedTicket, classification: Classification, citations: List[str]) -> str:
-    """
-    Mock LLM generation - Replace with actual LLM call
-    """
-    if classification.department == "IT":
-        return f"This appears to be a database connectivity issue. Please verify your network access per {citations[0]}. Assigning to DBA team."
-    elif classification.department == "HR":
-        return f"This is an onboarding request. Please review the contractor onboarding checklist ({citations[0]}) and ensure all compliance requirements are met."
-    return "This ticket has been received and will be reviewed by the support team."
-
-def check_policy(ticket: SanitizedTicket) -> List[str]:
-    """
-    Policy validation
-    """
-    flags = []
-    if "external_email" in ticket.redaction_flags:
-        flags.append("external_contact_detected")
-    if any(flag in ticket.redaction_flags for flag in ["ssn_detected", "credit_card_detected"]):
-        flags.append("high_sensitivity_pii")
-    return flags
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
