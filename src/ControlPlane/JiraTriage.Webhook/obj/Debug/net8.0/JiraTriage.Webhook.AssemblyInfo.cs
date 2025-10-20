@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JiraTriage.Webhook")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f1c2061261428c87eec197c9c14a4c860fc4a2be")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("JiraTriage.Webhook")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JiraTriage.Webhook")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
